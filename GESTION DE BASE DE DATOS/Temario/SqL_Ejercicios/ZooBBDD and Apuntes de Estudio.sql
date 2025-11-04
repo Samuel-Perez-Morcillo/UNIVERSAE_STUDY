@@ -154,4 +154,16 @@ select nombre as entorno, capacidad as capacidad_total
 from habitats
 where capacidad > (select avg(capacidad) from habitats);
 
+# Podremos Realizar un INNER JOIN que sirve para localizar aquellos campos que forman parte de dos o mas tablas
+# Solo se mostraran aquellos datos que sean comunes a las tablas comparadas
+
+select
+a.nombre as nombreAnimal,
+a.fechaNacimiento as fecha_de_Nacimiento,
+e.nombre as especie,
+h.nombre as habitat
+from animales a 
+Inner Join especies e on a.idEspecie=e.idEspecie
+inner join habitats h on a.idHabitat= h.idHabitat;
+
 
