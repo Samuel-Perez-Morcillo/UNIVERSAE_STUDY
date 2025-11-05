@@ -197,6 +197,20 @@ select * from vEspecies;
 
 -----------------------------------------------------------------------------------------------------------
 #DCL
+#Basada en los privilegios y claves de seguridad que se le bridan a los usuarios
+
+#Podemos crear un usuario nuevo
+CREATE USER 'Samue'@'samuehost' IDENTIFIED BY 'hola';
+SELECT user, host FROM mysql.user; -- Comprobacion de que ha sido creado con exito
+
+#Podremos asignar privilegios a ciertos usuarios 
+
+Grant all privileges on *.* to 'Samuel'@'samuelhost' with Grant Option;
+
+#Tambien podremos revocar los privilegios 
+
+revoke all privileges on *.* from 'Samuel'@'samuelhost';
+
 
 
 
