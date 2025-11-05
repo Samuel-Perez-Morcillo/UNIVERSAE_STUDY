@@ -163,7 +163,23 @@ a.fechaNacimiento as fecha_de_Nacimiento,
 e.nombre as especie,
 h.nombre as habitat
 from animales a 
-Inner Join especies e on a.idEspecie=e.idEspecie
+inner Join especies e on a.idEspecie=e.idEspecie
 inner join habitats h on a.idHabitat= h.idHabitat;
 
+# Tambien podremos realizar actualizaciones de las tablas con Update
 
+Update especies
+set nombre= 'Charmander'
+where idEspecie = 1;
+
+select *
+from especies;
+
+# Podremos usar el comando Delete para eliminar registros
+# Hay que tener cuidado porque en caso de no especificar una condicion se eliminaran todos los registros 
+
+delete from especies
+where idEspecie=1;
+
+
+# 
