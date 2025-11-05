@@ -181,5 +181,23 @@ from especies;
 delete from especies
 where idEspecie=1;
 
+-----------------------------------------------------------------------------------------------------------
+# DDL
 
-# 
+#Creacion de una Vista
+create view vEspecies(idEspecie,Nombre,nombreCientifico,familia) as
+select * 
+from vEspecies;
+
+#Eliminacion de una Vista
+drop view vEspecies;
+
+select * from vEspecies;
+
+
+-----------------------------------------------------------------------------------------------------------
+#DCL
+
+
+
+
