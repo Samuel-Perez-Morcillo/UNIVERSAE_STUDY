@@ -194,5 +194,49 @@ begin
 end;
 /
 
+-- usar RowType con cursores explicitos
 
+/*
+CURSOR cursor_alumnos IS SELECT ...
+→ defines el cursor con la consulta que quieres recorrer.
+
+u cursor_alumnos%ROWTYPE;
+→ crea una variable u que tiene exactamente las mismas columnas y tipos que las filas que devuelve el cursor.
+
+OPEN cursor_alumnos;
+→ ejecuta la consulta y prepara el conjunto de resultados.
+
+FETCH cursor_alumnos INTO u;
+→ obtiene la siguiente fila del cursor y guarda los valores en u.
+
+EXIT WHEN cursor_alumnos%NOTFOUND;
+→ sale del bucle cuando ya no quedan filas que leer.
+
+dbms_output.put_line(...)
+→ muestra la información de cada fila.
+
+CLOSE cursor_alumnos;
+→ libera la memoria del cursor (buena práctica).
+*/
+declare
+  cursor cursor_alumnos is
+  select nombre, edad, ciudad 
+  from usuarios;
+  u cursor_alumnos%Rowtype;
+  
+begin
+  open cursor_alumnos;
+    loop
+      fetch cursor_alumnos into u;
+      exit when cursor_alumnos%NOTFOUND;
+      
+      dbms_output.put_line('Usuario: ' || u.nombre || '  con la edad de  ' || u.edad || '  viviendo en la Ciudad de  ' || u.ciudad);
+    end loop;
+  close cursor_alumnos;
+end;
+/
+ 
+
+  
+  
   
