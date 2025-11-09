@@ -235,8 +235,101 @@ begin
   close cursor_alumnos;
 end;
 /
- 
 
+-- Manejo de Errores
+
+declare
+  edad number :=-5;
+begin
+  if edad < 0 then
+    raise_application_error(-20001, 'Edad Invalida');
+  end if;
+exception
+  When others then
+    dbms_output.put_line('Error; ' || SQLERRM);
+end;
+/
+
+ 
+-- LAS FUNCIONES
+/*
+Es importante destacar que las funciones devulven valores
+y se usan para acciones repetitivas
+*/
+
+create or replace function doble_numero(p_num in number) 
+return number is 
+begin
+  return p_num *2;
+end;
+/
+DECLARE
+    resultado NUMBER;
+BEGIN
+    resultado := doble_numero(10);
+    dbms_output.put_line('El doble es: ' || resultado);
+END;
+/
+
+-- otro ejemplo
+
+create or replace function entre_diez(p_num in number)
+return number is
+begin
+  return p_num/10;
+end;
+/
+declare 
+  operando number  := &Numero_a_Dividir;
+  resultado number;
+begin 
+  resultado := entre_diez(operando);
+  dbms_output.put_line('El valor  '|| operando || ' Dividido entre diez es '|| resultado);
+end;
+/
+
+
+-- LOS PROCEDIMIENTOS
+/*
+Los procedimientos se usan para acciones repetitivas
+Hay que tener en cuenta que no devulven valores
+*/
+--Ejemplo
+-- a la hora de insertar nuevos registros en nuestra tabla usuarios
+
+create or replace procedure insertar_usuarios(
+  p_nombre in varchar2,
+  p_edad in number,
+  p_ciudad in varchar2
+) as
+  begin 
+  if p_edad < 0 then
+    raise_application_error(-2001, 'La edad no puede ser negativa');
+  end if;
   
+  insert into Usuarios(nombre,edad,ciudad)
+  values(p_nombre,p_edad,p_ciudad);
   
+  dbms_output.put_line('Usuario ' ||p_nombre || ' insertado correctamente');
   
+  exception
+   when others then
+      dbms_output.put_line('Vigila lo que pones Bacalao : '|| SQLERRM);
+  end;
+/
+
+-- Para poder usar este procedimiento deberemos insertar un nuevo usuario
+
+begin
+  insertar_usuarios('Laura',23,'Dublin');
+end;
+/
+
+begin 
+  insertar_usuarios('Maria',-5,'Madrid');
+end;
+/
+
+SELECT * FROM usuarios;
+delete from usuarios
+where id=62;
