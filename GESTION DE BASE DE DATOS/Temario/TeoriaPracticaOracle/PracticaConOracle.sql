@@ -1,4 +1,5 @@
 SET SERVEROUTPUT ON;
+SET VERIFY OFF
 -- Ejemplo 1
 DECLARE BEGIN
     dbms_output.put_line('Hola Mundo PL/SQL');
@@ -180,5 +181,18 @@ BEGIN
 END;
 /
 
+-- Solicitud de datos por consola
+
+declare
+  nombre varchar2(20);
+  edad number;
+begin
+  nombre:='&Nombre';
+  edad:=&edad;
   
+  dbms_output.put_line('El usuario a ingresado su nombre que es '|| nombre || ' y su edad que es '|| edad); 
+end;
+/
+
+
   
