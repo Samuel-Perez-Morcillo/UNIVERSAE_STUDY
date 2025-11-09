@@ -333,3 +333,88 @@ end;
 SELECT * FROM usuarios;
 delete from usuarios
 where id=62;
+
+-- Para practicar 
+-- Crea una funcion que devuelva la edad de un usuario de la tabla usuarios
+
+create or replace function que_edad(p_nombre varchar2) 
+return number
+is
+  v_edad number;
+begin 
+  select edad
+  into v_edad
+  from usuarios
+  where Lower(nombre) = Lower(p_nombre);
+  
+  return v_edad;
+exception
+  when no_data_found then
+    dbms_output.put_line('Usuario no encontrado');
+        RETURN NULL;  
+    WHEN TOO_MANY_ROWS THEN
+        dbms_output.put_line('Hay más de un usuario con ese nombre');
+        RETURN NULL;  
+end;
+/
+
+declare
+  edad NUMBER;
+  nombre varchar2(50) := '&UsuarioNombre';
+begin
+  edad := que_edad(nombre);
+  if edad is not null then
+    dbms_output.put_line('La edad de  ' || nombre || ' es '|| edad);
+  end if;
+end;
+/
+  
+
+-- Package 
+/*
+Especificación (PACKAGE ... IS): declara lo que será público — procedimientos, funciones, tipos, constantes y variables que otros bloques podrán usar.
+
+Cuerpo (PACKAGE BODY ... IS): contiene la implementación de lo declarado; además puede contener elementos privados (solo visibles dentro del package body).
+Ventajas:
+Organización: agrupa funcionalidades relacionadas.
+Reutilización: centralizas lógica común.
+Encapsulación: ocultas detalles internos.
+Estado por sesión: las variables de paquete mantienen su valor durante la sesión del usuario (útil para caches, contadores, etc.).
+Mejora en rendimiento: al compilarse, PL/SQL carga la spec y parte del body en memoria.
+*/
+
+create or replace package usuarios_pkg is
+  procedure saludar(p_nombre in varchar2);
+  function edad_usuario(p_nombre in varchar2) 
+  return number;
+end usuarios_pkg;
+/
+
+-- Los paquetes son creados para englobar varias funciones o procedimientos previamente creados
+
+-- Triggers o Disparadores
+/* 
+Los disparadores son muy usados para el manejo de errores y la mantencion de la integridad de los datos antes de poder ser insertados
+*/
+create or replace trigger trg_usuarios_before_insert
+before insert on Usuarios
+for each row
+begin   
+  if :NEW.edad < 0 then
+    raise_application_error(-20001, 'No se pueden insertar edades negativas');
+  end if;
+  if Upper(:New.ciudad)= 'MURCIA' then 
+  raise_application_error(-20011, 'Murcia no existe');
+  end if;
+end;
+/
+
+INSERT INTO Usuarios (Nombre, Edad, Ciudad)
+VALUES ('Samu', 23, 'Murcia');
+
+
+delete from usuarios
+where ciudad='Murcia';
+
+select * from usuarios;
+
